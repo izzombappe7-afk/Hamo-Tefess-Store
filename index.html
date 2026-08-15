@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hamo Tefess Store — Boutique officielle des 72 Heures de Hamo Tefess.">
+<title>Hamo Tefess Store</title>
+
+<style>
+  :root {
+    --blue: #0647a1;
+    --dark-blue: #062b62;
+    --light-blue: #eaf5ff;
+    --black: #0b0b0d;
+    --white: #ffffff;
+    --gray: #f5f7fa;
+    --text: #10213d;
+    --green: #25d366;
+    --red: #e0245e;
+    --radius: 18px;
+    --shadow: 0 12px 35px rgba(0, 40, 90, .10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: Arial, Helvetica, sans-serif; color: var(--text); background: var(--white); line-height: 1.5; }
+  button, input, select, textarea { font: inherit; }
+  button { cursor: pointer; }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; }
+
+  /* TOP BAR */
+  .topbar { background: var(--dark-blue); color: white; padding: 9px 5%; font-size: 13px; }
+  .topbar-content { max-width: 1250px; margin: auto; display: flex; justify-content: space-between; gap: 20px; }
+
+  /* NAVBAR */
+  header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,.96); backdrop-filter: blur(12px); border-bottom: 1px solid #e8edf3; }
+  .navbar { max-width: 1250px; margin: auto; min-height: 88px; padding: 12px 5%; display: flex; align-items: center; justify-content: space-between; gap: 25px; position: relative; }
+  .brand { display: flex; align-items: center; gap: 14px; min-width: 230px; }
+  .brand-logo { width: 62px; height: 62px; object-fit: contain; flex-shrink: 0; }
+  .brand-name { font-size: 27px; font-weight: 900; letter-spacing: -1px; color: var(--dark-blue); }
+  .brand-store { display: block; color: var(--blue); letter-spacing: 7px; font-size: 17px; text-align: center; margin-top: -4px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; font-weight: 700; font-size: 14px; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-actions { display: flex; align-items: center; gap: 14px; }
+  .cart-btn { position: relative; background: transparent; border: 0; font-size: 25px; color: var(--dark-blue); }
+  .cart-count { position: absolute; top: -9px; right: -10px; background: var(--blue); color: white; font-size: 11px; min-width: 21px; height: 21px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; }
+  .primary-btn { background: var(--blue); color: white; border: 0; padding: 14px 23px; border-radius: 9px; font-weight: 800; transition: .2s; }
+  .primary-btn:hover { background: var(--dark-blue); transform: translateY(-2px); }
+
+  /* MOBILE MENU */
+  .mobile-menu { display: none; border: 0; background: transparent; font-size: 25px; color: var(--dark-blue); }
+  .mobile-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid #e8edf3;
+    box-shadow: 0 12px 20px rgba(0,0,0,.06);
+    flex-direction: column;
+    padding: 10px 5% 18px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a { padding: 12px 0; font-weight: 700; border-bottom: 1px solid #f0f3f7; }
+  .mobile-nav a:last-child { border-bottom: 0; }
+
+  /* HERO */
+  .hero {
+    min-height: 500px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    background:
+      linear-gradient(90deg, rgba(2,22,51,.96) 0%, rgba(2,35,75,.88) 45%, rgba(2,20,45,.7)),
+      linear-gradient(135deg, #0a1f42, #06162e);
+  }
+  .hero-inner { max-width: 1250px; margin: auto; min-height: 500px; padding: 60px 5%; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+  .hero-content { max-width: 530px; z-index: 2; }
+  .eyebrow { color: #6eb6ff; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+  .hero h1 { font-size: clamp(43px, 6vw, 76px); line-height: .95; margin-bottom: 18px; font-weight: 950; }
+  .hero h1 span { color: #1680ff; }
+  .hero-subtitle { font-size: 20px; font-weight: 600; margin-bottom: 25px; }
+  .event-date { display: inline-flex; align-items: center; gap: 12px; border: 1px solid #1680ff; padding: 13px 18px; border-radius: 10px; margin-bottom: 27px; background: rgba(0,0,0,.2); }
+  .event-date strong { display: block; font-size: 20px; }
+  .event-date small { color: #55a9ff; font-weight: 700; }
+
+  .hero-products { flex: 1; max-width: 650px; display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .hero-shirt-box {
+    width: 46%;
+    max-width: 290px;
+    aspect-ratio: 3/4;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 25px 20px rgba(0,0,0,.35));
+    transition: .3s;
+  }
+  .hero-shirt-box:hover { transform: translateY(-8px) scale(1.03); }
+  .hero-shirt-box img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+  /* HERO BENEFITS (3 items, overlaps hero bottom) */
+  .hero-benefits {
+    max-width: 1250px;
+    margin: -28px auto 55px;
+    position: relative;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    background: white;
+    box-shadow: var(--shadow);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .benefit { padding: 22px; border-right: 1px solid #e5e9ee; display: flex; align-items: center; gap: 13px; }
+  .benefit:last-child { border: 0; }
+  .benefit-icon { font-size: 27px; }
+  .benefit strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .benefit span { font-size: 12px; color: #68758a; }
+
+  /* PRODUCTS */
+  .section { max-width: 1250px; margin: auto; padding: 20px 5% 70px; }
+  .section-title { text-align: center; margin-bottom: 35px; }
+  .section-title .small { color: var(--blue); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; font-size: 13px; }
+  .section-title h2 { font-size: 35px; margin-top: 5px; color: var(--dark-blue); }
+
+  .products { display: grid; grid-template-columns: repeat(2,1fr); gap: 25px; }
+  .product-card { background: white; border: 1px solid #e8edf3; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; overflow: hidden; }
+
+  .product-images { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; position: relative; }
+  .product-image { background: var(--gray); border-radius: 13px; min-height: 165px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  .product-image img { width: 100%; height: 100%; object-fit: contain; transition: .3s; }
+  .product-image:hover img { transform: scale(1.06); }
+  .zoom-btn {
+    position: absolute; bottom: 8px; left: 8px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,.92); border: 1px solid #e0e6ee;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+  }
+
+  .product-info { display: flex; flex-direction: column; justify-content: center; }
+  .product-tag { font-size: 12px; color: var(--blue); font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+  .product-info h3 { font-size: 21px; color: var(--dark-blue); margin-bottom: 7px; }
+  .price { color: var(--blue); font-size: 27px; font-weight: 950; margin-bottom: 20px; }
+  .label { font-size: 13px; font-weight: 800; margin-bottom: 8px; display: block; }
+  .sizes { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 18px; }
+  .size-btn { border: 1px solid #d9e0e8; background: white; min-width: 42px; padding: 9px 11px; border-radius: 7px; font-weight: 800; transition: .2s; }
+  .size-btn.active, .size-btn:hover { background: var(--blue); border-color: var(--blue); color: white; }
+  .quantity { display: flex; align-items: center; width: max-content; border: 1px solid #d9e0e8; border-radius: 8px; overflow: hidden; margin-bottom: 18px; }
+  .quantity button { border: 0; background: #f6f8fa; width: 38px; height: 38px; font-size: 20px; }
+  .quantity span { width: 40px; text-align: center; font-weight: 800; }
+
+  .product-actions { display: flex; gap: 10px; }
+  .add-cart { flex: 1; border: 0; background: var(--blue); color: white; border-radius: 8px; padding: 13px; font-weight: 900; transition: .2s; }
+  .add-cart:hover { background: var(--dark-blue); }
+  .fav-btn { border: 1px solid #d9e0e8; background: white; border-radius: 8px; padding: 13px 16px; font-weight: 800; transition: .2s; white-space: nowrap; }
+  .fav-btn.active { border-color: var(--red); color: var(--red); background: #fff0f4; }
+
+  /* SECONDARY BENEFITS BAR (4 items, after products) */
+  .benefits-4 {
+    max-width: 1250px;
+    margin: 0 auto 20px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    background: white;
+    box-shadow: var(--shadow);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e8edf3;
+  }
+  .benefits-4 .benefit { border-right: 1px solid #e5e9ee; }
+  .benefits-4 .benefit:last-child { border-right: 0; }
+
+  /* INFO / HOW TO ORDER */
+  .info-section { background: var(--gray); padding: 70px 5%; }
+  .info-grid { max-width: 1250px; margin: auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .info-card { background: white; padding: 28px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,.05); }
+  .info-card .icon { font-size: 30px; margin-bottom: 12px; }
+  .info-card h3 { color: var(--dark-blue); margin-bottom: 8px; }
+  .info-card p { color: #69768a; font-size: 14px; }
+
+  /* WHATSAPP */
+  .whatsapp { position: fixed; bottom: 22px; right: 22px; z-index: 2000; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: white; font-size: 29px; box-shadow: 0 8px 25px rgba(0,0,0,.22); transition: .2s; }
+  .whatsapp:hover { transform: scale(1.08); }
+
+  /* MODAL (cart) */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .overlay.active { display: flex; }
+  .modal { background: white; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; border-radius: 20px; padding: 28px; position: relative; }
+  .close { position: absolute; top: 14px; right: 18px; border: 0; background: transparent; font-size: 28px; color: #68758a; }
+  .modal h2 { color: var(--dark-blue); margin-bottom: 6px; }
+  .modal-subtitle { color: #738096; margin-bottom: 22px; font-size: 14px; }
+  .cart-item { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-bottom: 1px solid #e8edf3; }
+  .cart-item strong { color: var(--dark-blue); }
+  .cart-total { display: flex; justify-content: space-between; padding: 18px 0; font-size: 20px; font-weight: 950; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 13px; border: 1px solid #d8e0e9; border-radius: 8px; outline: none; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--blue); }
+  .form-group input.invalid, .form-group textarea.invalid { border-color: var(--red); }
+  .delivery-box { background: var(--light-blue); border-radius: 10px; padding: 14px; margin: 18px 0; font-size: 13px; }
+  .confirm-btn { width: 100%; border: 0; background: var(--green); color: white; padding: 15px; border-radius: 9px; font-weight: 900; font-size: 16px; }
+
+  /* ZOOM MODAL */
+  .zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); z-index: 3500; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .zoom-overlay.active { display: flex; }
+  .zoom-overlay img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 10px; background: white; }
+  .zoom-overlay .close { position: fixed; top: 20px; right: 24px; color: white; font-size: 34px; }
+
+  /* FOOTER */
+  footer { background: var(--dark-blue); color: white; text-align: center; padding: 40px 20px; }
+  footer h3 { font-size: 24px; margin-bottom: 8px; }
+  footer p { color: #b8c9e0; font-size: 14px; }
+
+  /* MOBILE */
+  @media (max-width: 950px) {
+    .nav-links { display: none; }
+    .mobile-menu { display: block; }
+    .hero-inner { flex-direction: column; text-align: center; }
+    .hero-content { max-width: 700px; }
+    .hero-products { max-width: 650px; }
+    .hero-benefits { grid-template-columns: repeat(2,1fr); margin: 20px 5% 45px; }
+    .hero-benefits .benefit:nth-child(2) { border-right: 0; }
+    .hero-benefits .benefit:nth-child(1), .hero-benefits .benefit:nth-child(2) { border-bottom: 1px solid #e5e9ee; }
+    .benefits-4 { grid-template-columns: repeat(2,1fr); }
+    .benefits-4 .benefit:nth-child(odd) { border-right: 1px solid #e5e9ee; }
+    .benefits-4 .benefit:nth-child(even) { border-right: 0; }
+    .benefits-4 .benefit:nth-child(1), .benefits-4 .benefit:nth-child(2) { border-bottom: 1px solid #e5e9ee; }
+    .products { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 650px) {
+    .topbar-content { justify-content: center; text-align: center; }
+    .topbar-content span:last-child { display: none; }
+    .navbar { min-height: 72px; }
+    .brand { min-width: auto; }
+    .brand-logo { width: 48px; height: 48px; }
+    .brand-name { font-size: 20px; }
+    .brand-store { font-size: 12px; letter-spacing: 4px; }
+    .nav-actions .primary-btn { display: none; }
+    .hero { min-height: auto; }
+    .hero-inner { min-height: auto; padding: 50px 5% 30px; }
+    .hero h1 { font-size: 45px; }
+    .hero-subtitle { font-size: 16px; }
+    .hero-products { width: 100%; }
+    .hero-benefits { grid-template-columns: 1fr; }
+    .hero-benefits .benefit { border-right: 0; border-bottom: 1px solid #e5e9ee; }
+    .hero-benefits .benefit:last-child { border-bottom: 0; }
+    .benefits-4 { grid-template-columns: 1fr; }
+    .benefits-4 .benefit { border-right: 0 !important; border-bottom: 1px solid #e5e9ee; }
+    .benefits-4 .benefit:last-child { border-bottom: 0; }
+    .section-title h2 { font-size: 28px; }
+    .product-card { grid-template-columns: 1fr; }
+    .product-images { grid-template-columns: 1fr 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .event-date { text-align: left; }
+  }
+</style>
+
+<script>
+  // Defined here (before any <img> tags) so onerror handlers never fire
+  // before these functions exist — missing/404 images can fail almost
+  // instantly, faster than a script placed at the bottom of the page.
+  function svgPlaceholder(label, bg, fg) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+      <rect width="100%" height="100%" fill="${bg}"/>
+      <text x="50%" y="46%" font-family="Arial" font-size="20" font-weight="bold" fill="${fg}" text-anchor="middle">👕</text>
+      <text x="50%" y="58%" font-family="Arial" font-size="13" fill="${fg}" text-anchor="middle">${label}</text>
+    </svg>`;
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+
+  const PLACEHOLDER_LOGO = svgPlaceholder("LOGO", "#eaf5ff", "#0647a1");
+  const PLACEHOLDERS = {
+    blanc: svgPlaceholder("Photo à ajouter", "#f5f7fa", "#0647a1"),
+    noir: svgPlaceholder("Photo à ajouter", "#0b0b0d", "#ffffff")
+  };
+
+  function fallbackImg(imgEl, product) {
+    imgEl.onerror = null;
+    imgEl.src = PLACEHOLDERS[product];
+  }
+</script>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-content">
+    <span>✦ Événement culturel | 72 Heures de Hamo Tefess</span>
+    <span>🚚 Paiement à la livraison</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <nav class="navbar">
+
+    <a href="#accueil" class="brand">
+      <img src="assets/logo-hamo-tefess.png" alt="Logo Hamo Tefess" class="brand-logo" onerror="this.onerror=null;this.src=PLACEHOLDER_LOGO;">
+      <div>
+        <div class="brand-name">HAMO TEFESS</div>
+        <div class="brand-store">STORE</div>
+      </div>
+    </a>
+
+    <div class="nav-links">
+      <a href="#accueil">Accueil</a>
+      <a href="#boutique">Boutique</a>
+      <a href="#comment-commander">Comment commander</a>
+      <a href="#apropos">À propos</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div class="nav-actions">
+      <button class="cart-btn" onclick="openCart()" aria-label="Panier">
+        🛒
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="primary-btn" onclick="scrollToShop()">Commander</button>
+      <button class="mobile-menu" onclick="toggleMobileMenu()" aria-label="Menu" id="mobileMenuBtn">☰</button>
+    </div>
+
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#accueil" onclick="closeMobileMenu()">Accueil</a>
+      <a href="#boutique" onclick="closeMobileMenu()">Boutique</a>
+      <a href="#comment-commander" onclick="closeMobileMenu()">Comment commander</a>
+      <a href="#apropos" onclick="closeMobileMenu()">À propos</a>
+      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    </div>
+
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="hero-inner">
+
+    <div class="hero-content">
+      <div class="eyebrow">Édition officielle 2026</div>
+      <h1>72 HEURES DE <span>HAMO TEFESS</span></h1>
+      <p class="hero-subtitle">Un événement. Une identité. Une histoire.</p>
+
+      <div class="event-date">
+        <span style="font-size:28px;">📅</span>
+        <div>
+          <strong>18 AU 20 SEPTEMBRE 2026</strong>
+          <small>3 JOURS DE CULTURE, D'UNITÉ ET DE FIERTÉ</small>
+        </div>
+      </div>
+
+      <br>
+      <button class="primary-btn" onclick="scrollToShop()">🛍️ COMMANDER MON T-SHIRT</button>
+    </div>
+
+    <div class="hero-products">
+      <div class="hero-shirt-box">
+        <img src="assets/tshirt-blanc-face.png" alt="T-shirt Hamo Tefess blanc" onerror="fallbackImg(this,'blanc')">
+      </div>
+      <div class="hero-shirt-box">
+        <img src="assets/tshirt-noir-face.png" alt="T-shirt Hamo Tefess noir" onerror="fallbackImg(this,'noir')">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HERO BENEFITS (3 items) -->
+<div class="hero-benefits">
+  <div class="benefit">
+    <div class="benefit-icon">🛡️</div>
+    <div><strong>Qualité Premium</strong><span>Tissu doux et résistant</span></div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">👕</div>
+    <div><strong>Design Officiel</strong><span>72H Hamo Tefess</span></div>
+  </div>
+  <div class="benefit">
+    <div class="benefit-icon">🛵</div>
+    <div><strong>Livraison Rapide</strong><span>Partout à Hamo Tefess</span></div>
+  </div>
+</div>
+
+<!-- BOUTIQUE -->
+<section class="section" id="boutique">
+
+  <div class="section-title">
+    <div class="small">Collection officielle</div>
+    <h2>Nos T-shirts</h2>
+  </div>
+
+  <div class="products">
+
+    <!-- WHITE -->
+    <article class="product-card">
+      <div class="product-images">
+        <div class="product-image">
+          <img src="assets/tshirt-blanc-face.png" alt="T-shirt officiel Hamo Tefess blanc, face" onerror="fallbackImg(this,'blanc')">
+          <button class="zoom-btn" onclick="openZoom('assets/tshirt-blanc-face.png')" aria-label="Zoomer">🔍</button>
+        </div>
+        <div class="product-image">
+          <img src="assets/tshirt-blanc-dos.png" alt="T-shirt officiel Hamo Tefess blanc, dos" onerror="fallbackImg(this,'blanc')">
+        </div>
+      </div>
+
+      <div class="product-info">
+        <div class="product-tag">Édition officielle</div>
+        <h3>T-shirt Officiel — Blanc</h3>
+        <div class="price">5 000 FCFA</div>
+
+        <span class="label">Choisir la taille</span>
+        <div class="sizes" data-product="blanc">
+          <button class="size-btn" onclick="selectSize(this,'blanc','S')">S</button>
+          <button class="size-btn active" onclick="selectSize(this,'blanc','M')">M</button>
+          <button class="size-btn" onclick="selectSize(this,'blanc','L')">L</button>
+          <button class="size-btn" onclick="selectSize(this,'blanc','XL')">XL</button>
+          <button class="size-btn" onclick="selectSize(this,'blanc','XXL')">XXL</button>
+        </div>
+
+        <span class="label">Quantité</span>
+        <div class="quantity">
+          <button onclick="changeQuantity('blanc',-1)">−</button>
+          <span id="qty-blanc">1</span>
+          <button onclick="changeQuantity('blanc',1)">+</button>
+        </div>
+
+        <div class="product-actions">
+          <button class="add-cart" onclick="addToCart('blanc')">🛒 AJOUTER AU PANIER</button>
+          <button class="fav-btn" id="fav-blanc" onclick="toggleFav('blanc')">♡ Favoris</button>
+        </div>
+      </div>
+    </article>
+
+    <!-- BLACK -->
+    <article class="product-card">
+      <div class="product-images">
+        <div class="product-image">
+          <img src="assets/tshirt-noir-face.png" alt="T-shirt officiel Hamo Tefess noir, face" onerror="fallbackImg(this,'noir')">
+          <button class="zoom-btn" onclick="openZoom('assets/tshirt-noir-face.png')" aria-label="Zoomer">🔍</button>
+        </div>
+        <div class="product-image">
+          <img src="assets/tshirt-noir-dos.png" alt="T-shirt officiel Hamo Tefess noir, dos" onerror="fallbackImg(this,'noir')">
+        </div>
+      </div>
+
+      <div class="product-info">
+        <div class="product-tag">Édition officielle</div>
+        <h3>T-shirt Officiel — Noir</h3>
+        <div class="price">5 000 FCFA</div>
+
+        <span class="label">Choisir la taille</span>
+        <div class="sizes" data-product="noir">
+          <button class="size-btn" onclick="selectSize(this,'noir','S')">S</button>
+          <button class="size-btn active" onclick="selectSize(this,'noir','M')">M</button>
+          <button class="size-btn" onclick="selectSize(this,'noir','L')">L</button>
+          <button class="size-btn" onclick="selectSize(this,'noir','XL')">XL</button>
+          <button class="size-btn" onclick="selectSize(this,'noir','XXL')">XXL</button>
+        </div>
+
+        <span class="label">Quantité</span>
+        <div class="quantity">
+          <button onclick="changeQuantity('noir',-1)">−</button>
+          <span id="qty-noir">1</span>
+          <button onclick="changeQuantity('noir',1)">+</button>
+        </div>
+
+        <div class="product-actions">
+          <button class="add-cart" onclick="addToCart('noir')">🛒 AJOUTER AU PANIER</button>
+          <button class="fav-btn" id="fav-noir" onclick="toggleFav('noir')">♡ Favoris</button>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- SECONDARY BENEFITS BAR (4 items) -->
+<div class="section" style="padding-top:0;">
+  <div class="benefits-4">
+    <div class="benefit">
+      <div class="benefit-icon">🛵</div>
+      <div><strong>Livraison à domicile</strong><span>Nous livrons rapidement partout à Hamo Tefess.</span></div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">💵</div>
+      <div><strong>Paiement à la livraison</strong><span>Payez en espèces uniquement lorsque vous recevez votre commande.</span></div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">🛡️</div>
+      <div><strong>Produit officiel</strong><span>T-shirt officiel des 72 Heures de Hamo Tefess.</span></div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">💬</div>
+      <div><strong>Besoin d'aide ?</strong><span>Contactez-nous sur WhatsApp<br><strong>77 939 26 35</strong></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO ORDER -->
+<section class="info-section" id="comment-commander">
+  <div class="section-title">
+    <div class="small">Simple et rapide</div>
+    <h2>Comment commander ?</h2>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="icon">👕</div>
+      <h3>1. Choisissez votre T-shirt</h3>
+      <p>Choisissez votre couleur, votre taille et la quantité souhaitée.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">📝</div>
+      <h3>2. Passez votre commande</h3>
+      <p>Indiquez votre nom, votre numéro WhatsApp et votre adresse de livraison.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">💵</div>
+      <h3>3. Payez à la livraison</h3>
+      <p>Vous commandez maintenant et vous payez directement lorsque vous recevez votre T-shirt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="apropos">
+  <div class="section-title">
+    <div class="small">Hamo Tefess Store</div>
+    <h2>Fièrement Hamo, fièrement Tefess.</h2>
+  </div>
+  <p style="max-width:800px;margin:auto;text-align:center;color:#68758a;">
+    Hamo Tefess Store est la boutique officielle dédiée aux T-shirts
+    des 72 Heures de Hamo Tefess. Portez les couleurs de votre communauté
+    et participez à l'histoire de cet événement.
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <h3>HAMO TEFESS STORE</h3>
+  <p>La boutique officielle des 72 Heures de Hamo Tefess</p>
+  <p style="margin-top:12px;">📅 18 — 20 Septembre 2026</p>
+  <p style="margin-top:15px;">WhatsApp : <strong>77 939 26 35</strong></p>
+  <p style="margin-top:20px;font-size:12px;">© 2026 Hamo Tefess Store — Tous droits réservés.</p>
+</footer>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a class="whatsapp" href="https://wa.me/221779392635" target="_blank" aria-label="Contacter Hamo Tefess Store sur WhatsApp">☎</a>
+
+<!-- CART / ORDER MODAL -->
+<div class="overlay" id="cartModal">
+  <div class="modal">
+    <button class="close" onclick="closeCart()">×</button>
+    <h2>Votre commande</h2>
+    <p class="modal-subtitle">Vérifiez votre panier avant de confirmer.</p>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">0 FCFA</span>
+    </div>
+
+    <div id="checkoutForm">
+      <div class="form-group">
+        <label>Nom et prénom *</label>
+        <input type="text" id="customerName" placeholder="Ex : Mamadou Diop">
+      </div>
+      <div class="form-group">
+        <label>Numéro WhatsApp / téléphone *</label>
+        <input type="tel" id="customerPhone" placeholder="Ex : 77 123 45 67">
+      </div>
+      <div class="form-group">
+        <label>Quartier *</label>
+        <input type="text" id="customerArea" placeholder="Ex : Hamo Tefess">
+      </div>
+      <div class="form-group">
+        <label>Adresse / indication de livraison *</label>
+        <textarea id="customerAddress" rows="3" placeholder="Ex : près de..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Mode de réception *</label>
+        <select id="deliveryMethod">
+          <option value="Livraison à domicile">Livraison à domicile</option>
+          <option value="Retrait sur place">Retrait sur place</option>
+        </select>
+      </div>
+
+      <div class="delivery-box">
+        💵 <strong>Paiement à la livraison</strong><br>
+        Vous ne payez rien maintenant. Le paiement se fait lorsque vous recevez votre commande.
+      </div>
+
+      <button class="confirm-btn" onclick="confirmOrder()">✅ CONFIRMER LA COMMANDE</button>
+    </div>
+  </div>
+</div>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-overlay" id="zoomModal" onclick="closeZoom(event)">
+  <button class="close" onclick="closeZoom(event)">×</button>
+  <img id="zoomImg" src="" alt="Vue agrandie du produit">
+</div>
+
+<script>
+  const PRICE = 5000;
+  const WHATSAPP_NUMBER = "221779392635";
+
+  const products = {
+    blanc: { name: "T-shirt Officiel — Blanc", color: "Blanc", size: "M", quantity: 1, fav: false },
+    noir:  { name: "T-shirt Officiel — Noir",  color: "Noir",  size: "M", quantity: 1, fav: false }
+  };
+
+  let cart = [];
+
+  // ---------- Mobile menu ----------
+  function toggleMobileMenu() {
+    document.getElementById("mobileNav").classList.toggle("open");
+  }
+  function closeMobileMenu() {
+    document.getElementById("mobileNav").classList.remove("open");
+  }
+
+  // ---------- Product options ----------
+  function selectSize(button, product, size) {
+    const container = button.parentElement;
+    container.querySelectorAll(".size-btn").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
+    products[product].size = size;
+  }
+
+  function changeQuantity(product, amount) {
+    products[product].quantity += amount;
+    if (products[product].quantity < 1) products[product].quantity = 1;
+    if (products[product].quantity > 20) products[product].quantity = 20;
+    document.getElementById("qty-" + product).textContent = products[product].quantity;
+  }
+
+  function toggleFav(product) {
+    products[product].fav = !products[product].fav;
+    const btn = document.getElementById("fav-" + product);
+    btn.classList.toggle("active", products[product].fav);
+    btn.innerHTML = products[product].fav ? "♥ Favoris" : "♡ Favoris";
+  }
+
+  // ---------- Cart ----------
+  function addToCart(product) {
+    const selected = products[product];
+    const existing = cart.find(item => item.product === product && item.size === selected.size);
+
+    if (existing) {
+      existing.quantity += selected.quantity;
+    } else {
+      cart.push({
+        product: product,
+        name: selected.name,
+        color: selected.color,
+        size: selected.size,
+        quantity: selected.quantity,
+        price: PRICE
+      });
+    }
+
+    updateCart();
+    openCart();
+  }
+
+  function updateCart() {
+    const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+    document.getElementById("cartCount").textContent = cartCount;
+
+    const container = document.getElementById("cartItems");
+
+    if (cart.length === 0) {
+      container.innerHTML = `<p style="text-align:center;color:#68758a;padding:25px 0;">Votre panier est vide.</p>`;
+      document.getElementById("cartTotal").textContent = "0 FCFA";
+      return;
+    }
+
+    let total = 0;
+
+    container.innerHTML = cart.map((item, index) => {
+      const subtotal = item.price * item.quantity;
+      total += subtotal;
+
+      return `
+        <div class="cart-item">
+          <div>
+            <strong>${item.name}</strong><br>
+            <small>Taille : ${item.size} · Quantité : ${item.quantity}</small>
+          </div>
+          <div style="text-align:right;">
+            <strong>${subtotal.toLocaleString("fr-FR")} FCFA</strong><br>
+            <button onclick="removeItem(${index})" style="border:0;background:none;color:#d22;font-size:12px;margin-top:5px;cursor:pointer;">
+              Supprimer
+            </button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    document.getElementById("cartTotal").textContent = total.toLocaleString("fr-FR") + " FCFA";
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    updateCart();
+  }
+
+  function openCart() {
+    document.getElementById("cartModal").classList.add("active");
+    updateCart();
+  }
+
+  function closeCart() {
+    document.getElementById("cartModal").classList.remove("active");
+  }
+
+  function scrollToShop() {
+    document.getElementById("boutique").scrollIntoView({ behavior: "smooth" });
+    closeMobileMenu();
+  }
+
+  // ---------- Zoom modal ----------
+  function openZoom(src) {
+    document.getElementById("zoomImg").src = src;
+    document.getElementById("zoomModal").classList.add("active");
+  }
+  function closeZoom(event) {
+    if (event.target.id === "zoomModal" || event.target.classList.contains("close")) {
+      document.getElementById("zoomModal").classList.remove("active");
+    }
+  }
+
+  // ---------- Checkout ----------
+  function markInvalid(el, isInvalid) {
+    el.classList.toggle("invalid", isInvalid);
+  }
+
+  function confirmOrder() {
+    if (cart.length === 0) {
+      alert("Votre panier est vide.");
+      return;
+    }
+
+    const nameEl = document.getElementById("customerName");
+    const phoneEl = document.getElementById("customerPhone");
+    const areaEl = document.getElementById("customerArea");
+    const addressEl = document.getElementById("customerAddress");
+
+    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
+    const area = areaEl.value.trim();
+    const address = addressEl.value.trim();
+    const delivery = document.getElementById("deliveryMethod").value;
+
+    markInvalid(nameEl, !name);
+    markInvalid(phoneEl, !phone);
+    markInvalid(areaEl, !area);
+    markInvalid(addressEl, !address);
+
+    if (!name || !phone || !area || !address) {
+      alert("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    const orderNumber = "HT-" + Date.now().toString().slice(-6);
+    let total = 0;
+
+    // Build the full message as plain text first, then encode it ONCE.
+    // (Encoding pieces separately and mixing in raw "%0A" is what breaks
+    // the WhatsApp link in the original code.)
+    let lines = [];
+    lines.push("🛍️ NOUVELLE COMMANDE — HAMO TEFESS STORE");
+    lines.push("");
+    lines.push(`📦 Commande : ${orderNumber}`);
+    lines.push(`👤 Client : ${name}`);
+    lines.push(`📱 Téléphone : ${phone}`);
+    lines.push(`📍 Quartier : ${area}`);
+    lines.push(`🏠 Adresse : ${address}`);
+    lines.push(`🛵 Réception : ${delivery}`);
+    lines.push("");
+    lines.push("ARTICLES :");
+
+    cart.forEach(item => {
+      const subtotal = item.price * item.quantity;
+      total += subtotal;
+      lines.push(`👕 ${item.name}`);
+      lines.push(`   Taille : ${item.size}`);
+      lines.push(`   Quantité : ${item.quantity}`);
+      lines.push(`   Prix : ${subtotal.toLocaleString("fr-FR")} FCFA`);
+      lines.push("");
+    });
+
+    lines.push(`💰 TOTAL : ${total.toLocaleString("fr-FR")} FCFA`);
+    lines.push("");
+    lines.push("💵 Paiement à la livraison");
+
+    const fullMessage = lines.join("\n");
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(fullMessage)}`;
+
+    window.open(whatsappURL, "_blank");
+    alert("Votre commande est prête. WhatsApp va s'ouvrir pour envoyer la commande.");
+  }
+
+  document.getElementById("cartModal").addEventListener("click", function (event) {
+    if (event.target === this) closeCart();
+  });
+
+  updateCart();
+</script>
+
+</body>
+</html>
